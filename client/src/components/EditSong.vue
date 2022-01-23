@@ -80,8 +80,8 @@
 </template>
 
 <script>
-import Panel from '@/components/Panel'
 import SongsService from '@/services/SongsService'
+
 export default {
   data () {
     return {
@@ -109,6 +109,7 @@ export default {
         this.error = 'Please fill in all the required fields.'
         return
       }
+
       const songId = this.$store.state.route.params.songId
       try {
         await SongsService.put(this.song)
@@ -130,9 +131,6 @@ export default {
     } catch (err) {
       console.log(err)
     }
-  },
-  components: {
-    Panel
   }
 }
 </script>

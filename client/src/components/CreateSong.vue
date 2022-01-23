@@ -80,8 +80,8 @@
 </template>
 
 <script>
-import Panel from '@/components/Panel'
 import SongsService from '@/services/SongsService'
+
 export default {
   data () {
     return {
@@ -109,6 +109,7 @@ export default {
         this.error = 'Please fill in all the required fields.'
         return
       }
+
       try {
         await SongsService.post(this.song)
         this.$router.push({
@@ -118,9 +119,6 @@ export default {
         console.log(err)
       }
     }
-  },
-  components: {
-    Panel
   }
 }
 </script>
