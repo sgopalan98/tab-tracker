@@ -39,6 +39,7 @@ const {
     },
     async post (req, res) {
       try {
+        console.log("Here in post")
         const userId = req.user.id
         const {songId} = req.body
         const bookmark = await Bookmark.findOne({

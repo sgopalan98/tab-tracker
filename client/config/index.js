@@ -10,7 +10,14 @@ module.exports = {
     // Paths
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
-    proxyTable: {},
+    proxyTable: {'/musixmatchapi': {
+        target: 'https://api.musixmatch.com/',
+        changeOrigin: true,
+        pathRewrite: {
+          '^/musixmatchapi': ''
+        }
+      }
+    },
 
     // Various Dev Server settings
     host: 'localhost', // can be overwritten by process.env.HOST

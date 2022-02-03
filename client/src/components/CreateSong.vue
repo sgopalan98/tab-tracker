@@ -43,6 +43,12 @@
           :rules="[required]"
           v-model="song.youtubeId"
         ></v-text-field>
+        <v-btn
+        dark
+        class="cyan"
+        @click="search">
+        Search for song
+      </v-btn>
       </panel>
     </v-flex>
 
@@ -81,6 +87,8 @@
 
 <script>
 import SongsService from '@/services/SongsService'
+import Musixmatch from 'musixmatch'
+import keys from '@/assets/APIs'
 
 export default {
   data () {
@@ -118,6 +126,45 @@ export default {
       } catch (err) {
         console.log(err)
       }
+    },
+    async search(){
+      if(!this.song.title)
+        return
+      const query = this.song.title + " " + this.song.artist;
+      const url = `https://www.googleapis.com/youtube/v3/search?key=${keys.YOUTUBE_API_KEY}&type=video&part=snippet&q=${query}`;
+
+      const response = await fetch(url);
+      const data = await response.json();
+      this.song.youtubeId = data.items[0].id.videoId
+      console.log(this.song.youtubeId)
+
+      
+      const init = {
+          // Required from Musixmatch.com
+          apikey: keys.MUSIXMATCH_API_KEY,
+      
+          // Optional default 'https://api.musixmatch.com/ws/1.1/'
+          // baseURL will be prepended to `url` unless `url` is absolute.
+          baseURL: '/musixmatchapi/ws/1.1/',
+      
+          // // Optional if you have problem with CORS, default is 'https://cors-anywhere.herokuapp.com/'
+          // // if you want remove prefix CORS url set value tobe ''
+          corsURL: '',
+      
+          // // Optional default is 'Json'
+          // format: 'json'
+        }   
+ 
+        const music = Musixmatch(init)
+        
+        var song = this.song 
+        music.matcherLyrics({q_track:this.song.title, q_artist:this.song.artist})
+        .then(function(data){
+          console.log(data.lyrics.lyrics_body)
+          song.lyrics = data.lyrics.lyrics_body
+        }).catch(function(err){
+          console.log(err);
+        })
     }
   }
 }
